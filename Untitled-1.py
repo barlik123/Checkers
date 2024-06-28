@@ -80,14 +80,25 @@ def single_play(orig_cord: COORDS_TYPE, dest_cord: COORDS_TYPE,
                 board: BOARD_TYPE, player: str) -> None:
     avg_row = int((orig_cord[0] + dest_cord[0]) / 2)
     avg_col = int((orig_cord[1] + dest_cord[1]) / 2)
-    if is_can_move(orig_cord, dest_cord, board, player) and is_eatable(orig_cord, dest_cord, board, avg_row, avg_col, player): #checks if the move is a eat move
+    while is_can_move(orig_cord, dest_cord, board, player) and is_eatable(orig_cord, dest_cord, board, avg_row, avg_col, player): #checks if the move is a eat move
         eat_piece(orig_cord,dest_cord,board,avg_row,avg_col, player)
-    elif is_can_move(orig_cord, dest_cord, board, player) and move_range(orig_cord, dest_cord, player): #checks if the move is a simple move
+        print_board(board)
+        cont_eating = input("Do you want to keep eating? Y/N")
+        if cont_eating == 'N':
+            break
+        x, y = input("enter the eating destination x,y: ").split(',')
+        orig_cord = dest_cord
+        dest_cord = (int(x),int(y))
+        avg_row = int((orig_cord[0] + dest_cord[0]) / 2)
+        avg_col = int((orig_cord[1] + dest_cord[1]) / 2)
+    if is_can_move(orig_cord, dest_cord, board, player) and move_range(orig_cord, dest_cord, player): #checks if the move is a simple move
         update_piece(orig_cord, dest_cord, board,player)
 
 
 def game() -> None:
     board1 = init_board()
+    board1[4][3] = 'B'
+    board1[1][6] = 'O'
     print_board(board1) 
     player = 'W' #The player rotates between W (white) and B (black)
     Keep_playing = True
